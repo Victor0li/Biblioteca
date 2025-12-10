@@ -62,6 +62,8 @@ dependencies {
     val room_version = "2.6.1"
     val lifecycle_version = "2.7.0"
     val nav_version = "2.7.5"
+    val retrofit_version = "2.9.0"
+    val okhttp_version = "4.12.0"
 
     // 1. Room Persistence Library
     implementation("androidx.room:room-runtime:$room_version")
@@ -78,6 +80,14 @@ dependencies {
 
     // 4. Navegação Compose
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // 5. Retrofit e GSON para chamadas de API
+    implementation("com.squareup.retrofit2:retrofit:${retrofit_version}")
+    implementation("com.squareup.retrofit2:converter-gson:${retrofit_version}")
+    implementation("com.squareup.okhttp3:logging-interceptor:${okhttp_version}")
+
+    // 6. Coil - Carregamento de Imagem para Compose
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     // --- Dependências de Teste ---
     testImplementation(libs.junit)

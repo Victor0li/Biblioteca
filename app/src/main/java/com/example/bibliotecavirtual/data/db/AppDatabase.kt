@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.bibliotecavirtual.data.Livro
 
-// VERSÃO CORRIGIDA PARA 2
-@Database(entities = [Livro::class], version = 2, exportSchema = false)
+// VERSÃO CORRIGIDA PARA 3
+@Database(entities = [Livro::class], version = 3, exportSchema = false) // <--- MUDAR PARA 3
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun livroDao(): LivroDao
@@ -23,7 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "livro_database"
                 )
-
+                    // Esta linha garante que o banco de dados será apagado e recriado na mudança de versão.
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
