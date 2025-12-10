@@ -14,10 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.bibliotecavirtual.ui.viewmodel.LivroViewModel
+import coil.compose.AsyncImage // Import Coil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +34,6 @@ fun LivroDetailScreen(
     val secondaryColor = MaterialTheme.colorScheme.secondary
     val onSecondaryColor = MaterialTheme.colorScheme.onSecondary
     val errorColor = MaterialTheme.colorScheme.error
-
     val favoriteColor = Color(0xFFFFC107)
 
     Scaffold(
@@ -52,6 +53,7 @@ fun LivroDetailScreen(
                     }
                 },
                 actions = {
+                    // Mantido para compatibilidade, mesmo que a adição principal seja via busca
                     if (livro != null) {
                         IconButton(onClick = { navController.navigate("add_edit/$livroId") }) {
                             Icon(Icons.Default.Edit, contentDescription = "Editar")
@@ -78,7 +80,29 @@ fun LivroDetailScreen(
                     .padding(horizontal = 24.dp, vertical = 16.dp)
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally // Centraliza a imagem e os status
             ) {
+
+                // --- IMAGEM DA CAPA (PROEMINENTE) ---
+                livro.imageUrl?.let { url ->
+                    AsyncImage(
+                        model = url.replace("http://", "https://"),
+                        contentDescription = "Capa do Livro ${livro.titulo}",
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier
+                            .fillMaxWidth(0.6f) // Ocupa 60% da largura
+                            .heightIn(min = 180.dp)
+                            .padding(bottom = 24.dp)
+                    )
+                } ?: run {
+                    Icon(
+                        Icons.Default.MenuBook,
+                        contentDescription = "Sem capa",
+                        modifier = Modifier.size(120.dp).padding(bottom = 24.dp),
+                        tint = MaterialTheme.colorScheme.outline
+                    )
+                }
+                // --- FIM DA IMAGEM ---
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -105,7 +129,7 @@ fun LivroDetailScreen(
                 Divider()
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Text("Detalhes", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+                Text("Detalhes", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.align(Alignment.Start))
                 Spacer(modifier = Modifier.height(16.dp))
 
                 InfoRowNoIcon(label = "Autor", value = livro.autor)
@@ -114,7 +138,7 @@ fun LivroDetailScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Text("Sinopse", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+                Text("Sinopse", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.align(Alignment.Start))
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Surface(
@@ -149,6 +173,7 @@ fun LivroDetailScreen(
     }
 }
 
+// Códigos de StatusTagMaterial e InfoRowNoIcon mantidos sem alteração
 @Composable
 fun StatusTagMaterial(icon: ImageVector, label: String, color: Color, contentColor: Color, onClick: () -> Unit) {
     ElevatedButton(

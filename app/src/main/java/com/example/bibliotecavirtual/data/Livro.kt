@@ -13,5 +13,6 @@ data class Livro(
     val anoPublicacao: Int,
     val description: String,
     val isFavorito: Boolean = false,
-    val isLido: Boolean = false
+    val isLido: Boolean = false,
+    val imageUrl: String? = null
 )
